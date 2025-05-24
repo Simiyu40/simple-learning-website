@@ -19,6 +19,7 @@ export function FileViewer({ url, fileType, title, onClose }: FileViewerProps) {
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
           <button
+            type="button"
             onClick={onClose}
             className="p-1 hover:bg-gray-100 rounded-full"
             aria-label="Close viewer"
@@ -26,7 +27,7 @@ export function FileViewer({ url, fileType, title, onClose }: FileViewerProps) {
             <X className="h-6 w-6" />
           </button>
         </div>
-        
+
         <div className="flex-1 overflow-auto p-4">
           {isPDF ? (
             <iframe
@@ -57,4 +58,4 @@ export function FileViewer({ url, fileType, title, onClose }: FileViewerProps) {
       </div>
     </div>
   );
-} 
+}

@@ -9,36 +9,36 @@ export default function InspectPage() {
   const [solutions, setSolutions] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   useEffect(() => {
     async function fetchData() {
       try {
         setLoading(true);
-        
+
         // Initialize Supabase client
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
         const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-        
+
         const supabase = createClient(supabaseUrl, supabaseAnonKey);
-        
+
         // Fetch papers
         const { data: papersData, error: papersError } = await supabase
           .from('papers')
           .select('*')
           .order('created_at', { ascending: false });
-          
+
         if (papersError) throw papersError;
         setPapers(papersData || []);
-        
+
         // Fetch solutions
         const { data: solutionsData, error: solutionsError } = await supabase
           .from('solutions')
           .select('*')
           .order('created_at', { ascending: false });
-          
+
         if (solutionsError) throw solutionsError;
         setSolutions(solutionsData || []);
-        
+
       } catch (error) {
         console.error('Error fetching data:', error);
         setError(error instanceof Error ? error.message : 'Failed to fetch data');
@@ -46,48 +46,48 @@ export default function InspectPage() {
         setLoading(false);
       }
     }
-    
+
     fetchData();
   }, []);
-  
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
-          <p className="mt-2 text-gray-600">Loading database data...</p>
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-r-transparent loading-spinner"></div>
+          <p className="mt-2 text-muted-foreground">Loading database data...</p>
         </div>
       </div>
     );
   }
-  
+
   if (error) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="bg-red-50 p-4 rounded-md border border-red-200 text-red-700">
+        <div className="status-error p-4 rounded-md border">
           <h2 className="text-lg font-medium mb-2">Error Loading Data</h2>
           <p>{error}</p>
         </div>
         <div className="mt-4">
-          <Link href="/" className="text-blue-600 hover:underline">Return Home</Link>
+          <Link href="/" className="btn-primary px-3 py-2 rounded transition-all">Return Home</Link>
         </div>
       </div>
     );
   }
-  
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Database Inspector</h1>
-      
-      <div className="mb-8">
-        <Link href="/fix" className="text-blue-600 hover:underline mr-4">Go to Fix Page</Link>
-        <Link href="/browse" className="text-blue-600 hover:underline mr-4">Go to Browse Page</Link>
-        <Link href="/" className="text-blue-600 hover:underline">Return Home</Link>
+      <h1 className="text-3xl font-bold mb-6 text-foreground">Database Inspector</h1>
+
+      <div className="mb-8 flex flex-wrap gap-2">
+        <Link href="/fix" className="btn-warning px-3 py-2 rounded transition-all">Go to Fix Page</Link>
+        <Link href="/browse" className="btn-primary px-3 py-2 rounded transition-all">Go to Browse Page</Link>
+        <Link href="/" className="btn-secondary px-3 py-2 rounded transition-all">Return Home</Link>
       </div>
-      
+
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <h2 className="text-xl font-semibold mb-4">Papers ({papers.length})</h2>
-        
+
         {papers.length === 0 ? (
           <p className="text-gray-500 italic">No papers found in the database.</p>
         ) : (
@@ -121,10 +121,10 @@ export default function InspectPage() {
           </div>
         )}
       </div>
-      
+
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">Solutions ({solutions.length})</h2>
-        
+
         {solutions.length === 0 ? (
           <p className="text-gray-500 italic">No solutions found in the database.</p>
         ) : (
@@ -158,4 +158,4 @@ export default function InspectPage() {
       </div>
     </div>
   );
-} 
+}

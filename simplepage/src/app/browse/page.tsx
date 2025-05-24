@@ -107,6 +107,14 @@ export default function BrowsePage() {
 
       if (papersError) {
         console.error('Error fetching papers from storage:', papersError);
+
+        // Handle specific error types
+        if (papersError.message?.includes('invalid signature') || papersError.message?.includes('JWT')) {
+          throw new Error('Authentication error: Please check your Supabase configuration. The API key may be invalid or expired.');
+        }
+
+        // For other errors, continue but log them
+        console.warn('Papers bucket error (continuing):', papersError.message);
       }
 
       // Fetch files from solutions bucket
@@ -116,6 +124,14 @@ export default function BrowsePage() {
 
       if (solutionsError) {
         console.error('Error fetching solutions from storage:', solutionsError);
+
+        // Handle specific error types
+        if (solutionsError.message?.includes('invalid signature') || solutionsError.message?.includes('JWT')) {
+          throw new Error('Authentication error: Please check your Supabase configuration. The API key may be invalid or expired.');
+        }
+
+        // For other errors, continue but log them
+        console.warn('Solutions bucket error (continuing):', solutionsError.message);
       }
 
       // Process and combine the files
@@ -259,7 +275,6 @@ export default function BrowsePage() {
     // Remove any leading slashes from the path
     const cleanPath = filePath.startsWith('/') ? filePath.substring(1) : filePath;
     setHighlightedFile(cleanPath);
-    setViewMode('storage');
 
     // Clear the highlight after 3 seconds
     setTimeout(() => {

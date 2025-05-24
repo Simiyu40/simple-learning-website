@@ -3,50 +3,327 @@
 @tailwind utilities;
 
 :root {
+  /* Light theme colors with enhanced contrast */
   --background: #ffffff;
-  --foreground: #171717;
-  --primary: #3b82f6;
+  --foreground: #0f172a;
+  --muted: #f8fafc;
+  --muted-foreground: #475569;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --border: #e2e8f0;
+  --input: #ffffff;
+  --input-foreground: #0f172a;
+  --primary: #2563eb;
   --primary-foreground: #ffffff;
-  --secondary: #1f2937;
-  --secondary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
   --accent: #f0f9ff;
-  --accent-foreground: #0f172a;
+  --accent-foreground: #0c4a6e;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --success: #16a34a;
+  --success-foreground: #ffffff;
+  --warning: #d97706;
+  --warning-foreground: #ffffff;
+  --info: #0ea5e9;
+  --info-foreground: #ffffff;
+  --ring: #2563eb;
+  --radius: 0.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #000000;
-    --foreground: #ffffff;
-    --primary: #60a5fa;
-    --primary-foreground: #000000;
+    /* Dark theme colors with enhanced contrast */
+    --background: #020617;
+    --foreground: #f8fafc;
+    --muted: #0f172a;
+    --muted-foreground: #94a3b8;
+    --card: #0f172a;
+    --card-foreground: #f8fafc;
+    --popover: #0f172a;
+    --popover-foreground: #f8fafc;
+    --border: #334155;
+    --input: #1e293b;
+    --input-foreground: #f8fafc;
+    --primary: #3b82f6;
+    --primary-foreground: #f8fafc;
     --secondary: #1e293b;
-    --secondary-foreground: #ffffff;
-    --accent: #0f172a;
+    --secondary-foreground: #f8fafc;
+    --accent: #1e293b;
     --accent-foreground: #f0f9ff;
+    --destructive: #ef4444;
+    --destructive-foreground: #f8fafc;
+    --success: #22c55e;
+    --success-foreground: #f8fafc;
+    --warning: #f59e0b;
+    --warning-foreground: #f8fafc;
+    --info: #06b6d4;
+    --info-foreground: #f8fafc;
+    --ring: #3b82f6;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+  font-feature-settings: "rlig" 1, "calt" 1;
 }
 
-/* High contrast overrides */
+/* Enhanced contrast overrides */
 @layer base {
-  input, select, textarea {
-    background-color: var(--background);
-    color: var(--foreground);
-    border-color: var(--foreground);
-  }
-  
-  button {
-    background-color: var(--primary);
-    color: var(--primary-foreground);
-    border: 2px solid var(--primary);
+  * {
+    border-color: var(--border);
   }
 
-  button:hover {
+  /* Form elements with enhanced contrast */
+  input, select, textarea {
+    background-color: var(--input);
+    color: var(--input-foreground);
+    border: 2px solid var(--border);
+    transition: all 0.2s ease-in-out;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  /* Button styles with enhanced contrast */
+  button {
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    border: 2px solid transparent;
+  }
+
+  /* Primary buttons */
+  .btn-primary {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+    border-color: var(--primary);
+  }
+
+  .btn-primary:hover {
     background-color: var(--background);
     color: var(--primary);
+    border-color: var(--primary);
+  }
+
+  /* Secondary buttons */
+  .btn-secondary {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+    border-color: var(--border);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--muted);
+    border-color: var(--primary);
+  }
+
+  /* Destructive buttons */
+  .btn-destructive {
+    background-color: var(--destructive);
+    color: var(--destructive-foreground);
+    border-color: var(--destructive);
+  }
+
+  .btn-destructive:hover {
+    background-color: var(--background);
+    color: var(--destructive);
+    border-color: var(--destructive);
+  }
+
+  /* Success buttons */
+  .btn-success {
+    background-color: var(--success);
+    color: var(--success-foreground);
+    border-color: var(--success);
+  }
+
+  .btn-success:hover {
+    background-color: var(--background);
+    color: var(--success);
+    border-color: var(--success);
+  }
+
+  /* Card styles */
+  .card {
+    background-color: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  }
+
+  /* Enhanced table styles */
+  table {
+    background-color: var(--card);
+    color: var(--card-foreground);
+  }
+
+  thead {
+    background-color: var(--muted);
+    color: var(--muted-foreground);
+  }
+
+  tbody tr:hover {
+    background-color: var(--accent);
+  }
+
+  /* Warning buttons */
+  .btn-warning {
+    background-color: var(--warning);
+    color: var(--warning-foreground);
+    border-color: var(--warning);
+  }
+
+  .btn-warning:hover {
+    background-color: var(--background);
+    color: var(--warning);
+    border-color: var(--warning);
+  }
+
+  /* Info buttons */
+  .btn-info {
+    background-color: var(--info);
+    color: var(--info-foreground);
+    border-color: var(--info);
+  }
+
+  .btn-info:hover {
+    background-color: var(--background);
+    color: var(--info);
+    border-color: var(--info);
+  }
+
+  /* Status indicators */
+  .status-success {
+    background-color: var(--success);
+    color: var(--success-foreground);
+  }
+
+  .status-error {
+    background-color: var(--destructive);
+    color: var(--destructive-foreground);
+  }
+
+  .status-warning {
+    background-color: var(--warning);
+    color: var(--warning-foreground);
+  }
+
+  .status-info {
+    background-color: var(--info);
+    color: var(--info-foreground);
+  }
+
+  /* Enhanced text colors */
+  .text-foreground {
+    color: var(--foreground);
+  }
+
+  .text-muted-foreground {
+    color: var(--muted-foreground);
+  }
+
+  .text-card-foreground {
+    color: var(--card-foreground);
+  }
+
+  /* Navigation styles */
+  .nav-container {
+    background-color: var(--card);
+    border-color: var(--border);
+  }
+
+  /* Accent sections */
+  .accent-section {
+    background-color: var(--accent);
+    border-color: var(--primary);
+  }
+
+  .accent-section h3 {
+    color: var(--primary);
+  }
+
+  /* Border utilities */
+  .border-custom {
+    border-color: var(--border);
+  }
+
+  /* Loading spinner */
+  .spinner-primary {
+    border-color: var(--primary);
+  }
+
+  /* Storage status indicators */
+  .storage-error {
+    color: var(--destructive-foreground);
+    background-color: var(--destructive);
+  }
+
+  .storage-warning {
+    color: var(--warning-foreground);
+    background-color: var(--warning);
+  }
+
+  .storage-success {
+    color: var(--success-foreground);
+    background-color: var(--success);
+  }
+
+  /* Additional utility classes for replacing inline styles */
+  .text-primary-color {
+    color: var(--primary);
+  }
+
+  .bg-accent-with-primary-border {
+    background-color: var(--accent);
+    border-color: var(--primary);
+  }
+
+  .border-custom-color {
+    border-color: var(--border);
+  }
+
+  .spinner-border-primary {
+    border-color: var(--primary);
+  }
+
+  /* Specific component classes */
+  .admin-setup-section {
+    background-color: var(--accent);
+    border-color: var(--primary);
+  }
+
+  .admin-setup-title {
+    color: var(--primary);
+  }
+
+  .fix-section {
+    background-color: var(--accent);
+    border-color: var(--primary);
+  }
+
+  .fix-section-title {
+    color: var(--primary);
+  }
+
+  .details-border {
+    border-color: var(--border);
+  }
+
+  .sample-paper-item {
+    border-color: var(--border);
+  }
+
+  .navigation-footer {
+    border-color: var(--border);
+  }
+
+  .loading-spinner {
+    border-color: var(--primary);
   }
 }

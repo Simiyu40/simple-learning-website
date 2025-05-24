@@ -41,18 +41,34 @@ export function StorageProvider({ children }: { children: React.ReactNode }) {
     const initializeStorage = async () => {
       try {
         const response = await fetch('/api/init-storage');
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
         const data = await response.json();
-        
+
         if (!data.success) {
           throw new Error(data.error || 'Failed to initialize storage');
         }
-        
+
         setIsStorageReady(true);
         setStorageError(null);
+        console.log('Storage initialized successfully');
       } catch (err) {
         console.error('Storage initialization error:', err);
-        setStorageError(err instanceof Error ? err.message : 'An unknown error occurred');
-        setIsStorageReady(false);
+        const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+
+        // Check if it's a network/connection error
+        if (errorMessage.includes('fetch failed') || errorMessage.includes('ENOTFOUND') || errorMessage.includes('Network connection failed')) {
+          setStorageError('Network connection failed - working in offline mode');
+          // Set storage as "ready" but with limited functionality
+          setIsStorageReady(true);
+          console.log('Working in offline mode due to network issues');
+        } else {
+          setStorageError(errorMessage);
+          setIsStorageReady(false);
+        }
       }
     };
 
@@ -67,11 +83,11 @@ export function StorageProvider({ children }: { children: React.ReactNode }) {
 
     setIsUploading(true);
     setStorageError(null);
-    
+
     try {
       const formData = new FormData();
       formData.append('file', file);
-      
+
       if (options.type === 'paper') {
         if (!options.title) {
           throw new Error('Title is required for paper uploads');
@@ -86,20 +102,20 @@ export function StorageProvider({ children }: { children: React.ReactNode }) {
         formData.append('paperId', options.paperId);
         formData.append('questionId', options.questionId);
       }
-      
+
       const endpoint = '/api/upload-minimal';
-      
+
       const response = await fetch(endpoint, {
         method: 'POST',
         body: formData,
       });
-      
+
       const result = await response.json();
-      
+
       if (!response.ok || !result.success) {
         throw new Error(result.error || 'Upload failed');
       }
-      
+
       return result.fileInfo;
     } catch (err) {
       console.error('Upload error:', err);
@@ -127,26 +143,26 @@ export function StorageProvider({ children }: { children: React.ReactNode }) {
 // Export a simple status indicator component
 export function StorageStatus() {
   const { isStorageReady, storageError } = useStorage();
-  
+
   if (storageError) {
     return (
-      <div className="text-sm text-red-600">
+      <div className="text-sm px-2 py-1 rounded storage-error">
         Storage error: {storageError}
       </div>
     );
   }
-  
+
   if (!isStorageReady) {
     return (
-      <div className="text-sm text-gray-600">
+      <div className="text-sm px-2 py-1 rounded storage-warning">
         Initializing storage...
       </div>
     );
   }
-  
+
   return (
-    <div className="text-sm text-green-600">
+    <div className="text-sm px-2 py-1 rounded storage-success">
       Storage ready
     </div>
   );
-} 
+}
