@@ -372,7 +372,7 @@ export default function BrowsePage() {
 
   const handleViewStorageFile = async (file: StorageFile) => {
     try {
-      const fileType = file.fileType || getFileTypeFromName(file.name);
+      const fileType = getFileTypeFromName(file.name);
       const url = getFileUrl(file.name, file.bucket);
       setViewingFile({
         url,
