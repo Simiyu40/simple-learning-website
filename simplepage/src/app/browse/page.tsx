@@ -475,8 +475,8 @@ export default function BrowsePage() {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8" suppressHydrationWarning>
       {/* Header Section */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2" suppressHydrationWarning>Learning Resources</h1>
-        <p className="text-gray-600 dark:text-gray-400" suppressHydrationWarning>
+        <h1 className="text-3xl font-bold text-foreground mb-2" suppressHydrationWarning>Learning Resources</h1>
+        <p className="text-muted-foreground" suppressHydrationWarning>
           Browse and download educational papers and solutions
           </p>
         </div>
@@ -493,7 +493,7 @@ export default function BrowsePage() {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 pr-4 py-2 border rounded-md w-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
             />
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           </div>
 
           <button
@@ -502,7 +502,7 @@ export default function BrowsePage() {
               setLoading(true);
               fetchStorageFiles();
             }}
-            className="flex items-center gap-1 px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+            className="flex items-center gap-1 px-4 py-2 text-sm refresh-button rounded-md"
             disabled={loading}
           >
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
@@ -514,17 +514,17 @@ export default function BrowsePage() {
       {/* Read View */}
       {storageFiles.length > 0 && (
           <div className="grid gap-4">
-            <div className="overflow-hidden rounded-lg border border-gray-200">
+            <div className="overflow-hidden rounded-lg border-custom-color">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                <thead>
                   <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">File</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bucket</th>
-                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">File</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Type</th>
+                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Bucket</th>
+                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="divide-y divide-gray-200">
                   {storageFiles
                     .filter(file => !searchQuery || file.name.toLowerCase().includes(searchQuery.toLowerCase()))
                     .map((file) => {
@@ -638,7 +638,7 @@ export default function BrowsePage() {
                 setLoading(true);
                 fetchStorageFiles();
               }}
-              className="px-5 py-3 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors font-medium flex items-center"
+              className="px-5 py-3 refresh-button rounded-md flex items-center"
               disabled={loading}
             >
               <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
@@ -659,31 +659,31 @@ export default function BrowsePage() {
 
       {/* Delete Confirmation Dialog */}
       {deleteConfirmation?.show && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+        <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50">
+          <div className="modal-container rounded-lg p-6 max-w-md w-full mx-4">
             <div className="flex items-center mb-4">
               <div className="flex-shrink-0">
-                <AlertCircle className="h-6 w-6 text-red-600" />
+                <AlertCircle className="h-6 w-6 text-destructive" />
               </div>
               <div className="ml-3">
-                <h3 className="text-lg font-medium text-gray-900">
+                <h3 className="text-lg font-medium modal-title">
                   Delete File
                 </h3>
               </div>
             </div>
 
             <div className="mb-4">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 Are you sure you want to delete this file? This action cannot be undone.
               </p>
-              <div className="mt-2 p-3 bg-gray-50 rounded-md">
+              <div className="mt-2 p-3 bg-surface rounded-md border-custom-color">
                 <div className="flex items-center">
                   {getFileIcon(getFileTypeFromName(deleteConfirmation.file.name))}
                   <div className="ml-2">
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-card-foreground">
                       {getReadableFileName(deleteConfirmation.file.name)}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-muted-foreground">
                       {deleteConfirmation.file.bucket === 'papers' ? 'Paper' : 'Solution'}
                     </p>
                   </div>
@@ -695,7 +695,7 @@ export default function BrowsePage() {
               <button
                 type="button"
                 onClick={cancelDelete}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="px-4 py-2 text-sm font-medium btn-secondary rounded-md"
                 disabled={isDeleting}
               >
                 Cancel
@@ -703,7 +703,7 @@ export default function BrowsePage() {
               <button
                 type="button"
                 onClick={() => handleDeleteFile(deleteConfirmation.file)}
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 text-sm font-medium btn-destructive rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={isDeleting}
               >
                 {isDeleting ? (

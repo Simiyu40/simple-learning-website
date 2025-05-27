@@ -85,8 +85,8 @@ export default function InspectPage() {
         <Link href="/" className="btn-secondary px-3 py-2 rounded transition-all">Return Home</Link>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-        <h2 className="text-xl font-semibold mb-4">Papers ({papers.length})</h2>
+      <div className="bg-card p-6 rounded-lg shadow-md mb-8 border-custom-color">
+        <h2 className="text-xl font-semibold mb-4 text-card-foreground">Papers ({papers.length})</h2>
 
         {papers.length === 0 ? (
           <p className="text-gray-500 italic">No papers found in the database.</p>

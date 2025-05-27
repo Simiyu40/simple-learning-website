@@ -36,15 +36,15 @@ export default function MinimalBrowsePage() {
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
       }
-      
+
       const data = await response.json();
       if (!data.success) {
         throw new Error(data.error || 'Failed to fetch data');
       }
-      
+
       setPapers(data.results.papers || []);
       setSolutions(data.results.solutions || {});
-      
+
     } catch (error) {
       console.error('Error fetching papers or solutions:', error);
       setError(error instanceof Error ? error.message : 'Failed to fetch papers or solutions');
@@ -57,18 +57,18 @@ export default function MinimalBrowsePage() {
     try {
       setLoading(true);
       setError(null);
-      
+
       // Fetch files from storage directly
       const response = await fetch('/api/list-storage');
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
       }
-      
+
       const data = await response.json();
       if (!data.success) {
         throw new Error(data.error || 'Failed to fetch storage files');
       }
-      
+
       // Combine papers and solutions
       const allFiles = [
         ...(data.results.papers || []),
@@ -78,9 +78,9 @@ export default function MinimalBrowsePage() {
         const dateB = b.created_at || b.updated_at || b.last_modified_at || '';
         return dateB.localeCompare(dateA); // Sort newest first
       });
-      
+
       setStorageFiles(allFiles);
-      
+
     } catch (error) {
       console.error('Error fetching storage files:', error);
       setError(error instanceof Error ? error.message : 'Failed to fetch storage files');
@@ -127,7 +127,7 @@ export default function MinimalBrowsePage() {
     <div className="flex flex-col items-center justify-center min-h-[50vh] p-4 bg-red-50 border border-red-200 rounded-lg">
       <div className="text-red-500 font-medium mb-2">Error loading content</div>
       <p className="text-red-700">{error}</p>
-      <button 
+      <button
         onClick={() => viewMode === 'database' ? fetchPapersAndSolutions() : fetchStorageFiles()}
         className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
       >
@@ -138,7 +138,7 @@ export default function MinimalBrowsePage() {
 
   const getFileIcon = (fileType?: string) => {
     if (!fileType) return <File className="h-5 w-5 text-gray-400" />;
-    
+
     switch (fileType.toLowerCase()) {
       case 'pdf':
         return <FileText className="h-5 w-5 text-red-500" />;
@@ -171,8 +171,8 @@ export default function MinimalBrowsePage() {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8 border-b pb-4 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Browse Papers and Solutions</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
+          <h1 className="text-3xl font-bold text-foreground">Browse Papers and Solutions</h1>
+          <p className="text-muted-foreground mt-2">
             View and download uploaded papers and their solutions
           </p>
         </div>
@@ -196,7 +196,7 @@ export default function MinimalBrowsePage() {
               setLoading(true);
               viewMode === 'database' ? fetchPapersAndSolutions() : fetchStorageFiles();
             }}
-            className="flex items-center gap-1 px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+            className="flex items-center gap-1 px-3 py-2 text-sm refresh-button rounded-md"
             disabled={loading}
           >
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
@@ -204,7 +204,7 @@ export default function MinimalBrowsePage() {
           </button>
         </div>
       </div>
-      
+
       {viewMode === 'database' ? (
         papers.length > 0 ? (
           <div className="grid gap-8">
@@ -302,22 +302,22 @@ export default function MinimalBrowsePage() {
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center bg-white dark:bg-gray-800 rounded-lg p-12 border border-gray-200 shadow-md text-center">
-            <File className="h-16 w-16 text-blue-500 mb-4" />
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No Papers Found in Database</h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-md">
+          <div className="flex flex-col items-center justify-center bg-card rounded-lg p-12 border-custom-color shadow-md text-center">
+            <File className="h-16 w-16 text-primary mb-4" />
+            <h3 className="text-xl font-semibold text-card-foreground mb-2">No Papers Found in Database</h3>
+            <p className="text-muted-foreground mb-6 max-w-md">
               You haven't uploaded any papers to the database yet. Upload your first paper to get started.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <a 
+              <a
                 href="/"
-                className="px-5 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
+                className="px-5 py-3 btn-primary rounded-md transition-colors font-medium"
               >
                 Go to Upload Page
               </a>
               <button
                 onClick={() => fetchPapersAndSolutions()}
-                className="px-5 py-3 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors font-medium"
+                className="px-5 py-3 refresh-button rounded-md"
               >
                 Refresh View
               </button>
@@ -346,7 +346,7 @@ export default function MinimalBrowsePage() {
                   {storageFiles.map((file) => {
                     const fileType = getFileTypeFromName(file.name);
                     const readableName = getReadableFileName(file.name);
-                    
+
                     return (
                       <tr key={`${file.bucket}-${file.name}`} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -400,7 +400,7 @@ export default function MinimalBrowsePage() {
             <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md">
               No files have been uploaded to storage yet. Upload some files first.
             </p>
-            <a 
+            <a
               href="/"
               className="px-5 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
             >
@@ -409,7 +409,7 @@ export default function MinimalBrowsePage() {
           </div>
         )
       )}
-      
+
       {/* Solution Upload Modal */}
       {showSolutionModal && selectedPaper && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
@@ -423,14 +423,14 @@ export default function MinimalBrowsePage() {
             <h2 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
               Upload Solution for Paper: <span className="text-blue-600">{selectedPaper.title}</span>
             </h2>
-            
+
             <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
               <p className="text-blue-600 text-sm">
-                <strong>Note:</strong> Your solution will be uploaded and linked to this paper in the database. 
+                <strong>Note:</strong> Your solution will be uploaded and linked to this paper in the database.
                 It will be visible in the Database View.
               </p>
             </div>
-            
+
             <UploadForms
               papers={[selectedPaper]}
               onPaperUpload={() => {}}
@@ -441,4 +441,4 @@ export default function MinimalBrowsePage() {
       )}
     </div>
   );
-} 
+}

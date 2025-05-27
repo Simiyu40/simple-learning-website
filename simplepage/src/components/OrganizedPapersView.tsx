@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  File, FolderOpen, RefreshCw, Search, FileQuestion, 
-  Download, Plus, FileText, BookOpenCheck, ClipboardCheck, 
+import {
+  File, FolderOpen, RefreshCw, Search, FileQuestion,
+  Download, Plus, FileText, BookOpenCheck, ClipboardCheck,
   Filter, X
 } from 'lucide-react';
 
@@ -35,17 +35,17 @@ const OrganizedPapersView = () => {
   const fetchPapers = async () => {
     setIsLoading(true);
     setError('');
-    
+
     try {
       const response = await fetch(`/api/get-papers?query=${searchQuery}`);
       const data = await response.json();
-      
+
       if (data.success) {
         // Store the papers data directly from the API response
         const papers = data.papers || {};
         setCategorizedPapers(papers);
         setFilteredCategories(papers);
-        
+
         // For backwards compatibility, create a flat list of all papers
         const allPapers: Paper[] = [];
         Object.values(papers).forEach((group: any) => {
@@ -54,7 +54,7 @@ const OrganizedPapersView = () => {
           }
         });
         setPapers(allPapers);
-        
+
         console.log('API Response:', data);
         console.log('Categorized Papers:', data.papers);
       } else {
@@ -144,9 +144,10 @@ const OrganizedPapersView = () => {
     return (
       <div className="p-4 text-center">
         <div className="text-red-500 mb-2">{error}</div>
-        <button 
-          onClick={fetchPapers} 
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center mx-auto"
+        <button
+          type="button"
+          onClick={fetchPapers}
+          className="px-4 py-2 btn-primary rounded flex items-center mx-auto"
         >
           <RefreshCw className="h-4 w-4 mr-2" />
           Try Again
@@ -162,7 +163,7 @@ const OrganizedPapersView = () => {
           <FolderOpen className="h-5 w-5 mr-2 text-blue-500" />
           Read View
         </h2>
-        
+
         {/* Search bar */}
         <form onSubmit={handleSearch} className="mt-3">
           <div className="relative">
@@ -176,15 +177,15 @@ const OrganizedPapersView = () => {
             <div className="absolute left-3 top-2.5">
               <Search className="h-5 w-5 text-gray-400" />
             </div>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="absolute right-2 top-2 px-2 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600"
             >
               Search
             </button>
           </div>
         </form>
-        
+
         {/* Filter tabs */}
         {Object.keys(categorizedPapers).length > 0 && (
           <div className="mt-4 flex items-center border-b pb-2">
@@ -200,7 +201,7 @@ const OrganizedPapersView = () => {
               >
                 All
               </button>
-              
+
               {Object.keys(categorizedPapers).sort().map(category => (
                 <button
                   key={category}
@@ -214,7 +215,7 @@ const OrganizedPapersView = () => {
                   {getCategoryLabel(category)}
                 </button>
               ))}
-              
+
               {activeFilter !== 'all' && (
                 <button
                   onClick={() => setActiveFilter('all')}
@@ -228,13 +229,13 @@ const OrganizedPapersView = () => {
           </div>
         )}
       </div>
-      
+
       <div className="p-4">
         {Object.keys(filteredCategories).length === 0 ? (
           <div className="text-center py-8">
             <FileQuestion className="h-12 w-12 text-gray-400 mx-auto mb-3" />
             <p className="text-gray-500">No papers found. Upload a paper to get started.</p>
-            <button 
+            <button
               className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center mx-auto"
               onClick={() => window.location.href = '/upload-example'}
             >
@@ -252,7 +253,7 @@ const OrganizedPapersView = () => {
                     {getCategoryLabel(category)} ({papers.length})
                   </h3>
                 </div>
-                
+
                 <div className="divide-y">
                   {papers.map((paper) => (
                     <div key={paper.id} className="px-4 py-3 hover:bg-gray-50 transition-colors">
@@ -265,7 +266,7 @@ const OrganizedPapersView = () => {
                               </span>
                             </div>
                           </div>
-                          
+
                           <div className="ml-3">
                             <h4 className="font-medium text-gray-900">{paper.title}</h4>
                             <div className="mt-1 flex items-center text-sm text-gray-500 space-x-3">
@@ -277,8 +278,8 @@ const OrganizedPapersView = () => {
                             </div>
                           </div>
                         </div>
-                        
-                        <a 
+
+                        <a
                           href={paper.public_url || `/api/download?path=${paper.file_path}&bucket=papers`}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -300,4 +301,4 @@ const OrganizedPapersView = () => {
   );
 };
 
-export default OrganizedPapersView; 
+export default OrganizedPapersView;
