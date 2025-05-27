@@ -55,61 +55,62 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Additional Tools Section */}
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="card rounded-lg overflow-hidden">
-          <div className="p-6">
-            <h2 className="text-xl font-semibold mb-4 text-card-foreground">
-              Database Tools
-            </h2>
-            <p className="mb-4 text-muted-foreground">
-              Fix database issues and inspect stored data.
-            </p>
-            <div className="flex flex-wrap gap-2">
+      {/* Additional Tools Section - Hidden as requested */}
+      {false && (
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="card rounded-lg overflow-hidden">
+            <div className="p-6">
+              <h2 className="text-xl font-semibold mb-4 text-card-foreground">
+                Database Tools
+              </h2>
+              <p className="mb-4 text-muted-foreground">
+                Fix database issues and inspect stored data.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  href="/fix"
+                  className="inline-block px-4 py-2 rounded transition-all"
+                  style={{
+                    backgroundColor: 'var(--warning)',
+                    color: 'var(--warning-foreground)',
+                    border: '2px solid var(--warning)'
+                  }}
+                >
+                  Fix Database
+                </Link>
+                <Link
+                  href="/inspect"
+                  className="inline-block px-4 py-2 rounded transition-all"
+                  style={{
+                    backgroundColor: 'var(--info)',
+                    color: 'var(--info-foreground)',
+                    border: '2px solid var(--info)'
+                  }}
+                >
+                  Inspect Data
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          <div className="card rounded-lg overflow-hidden">
+            <div className="p-6">
+              <h2 className="text-xl font-semibold mb-4 text-card-foreground">
+                Database Administration
+              </h2>
+              <p className="mb-4 text-muted-foreground">
+                Manage database schema and fix any issues with the database.
+              </p>
               <Link
-                href="/fix"
-                className="inline-block px-4 py-2 rounded transition-all"
-                style={{
-                  backgroundColor: 'var(--warning)',
-                  color: 'var(--warning-foreground)',
-                  border: '2px solid var(--warning)'
-                }}
+                href="/admin/db-fix"
+                className="btn-destructive inline-block px-4 py-2 rounded hover:opacity-90 transition-all"
               >
-                Fix Database
-              </Link>
-              <Link
-                href="/inspect"
-                className="inline-block px-4 py-2 rounded transition-all"
-                style={{
-                  backgroundColor: 'var(--info)',
-                  color: 'var(--info-foreground)',
-                  border: '2px solid var(--info)'
-                }}
-              >
-                Inspect Data
+                Database Admin
               </Link>
             </div>
           </div>
         </div>
-
-        {/* Database Admin Section */}
-        <div className="card rounded-lg overflow-hidden">
-          <div className="p-6">
-            <h2 className="text-xl font-semibold mb-4 text-card-foreground">
-              Database Administration
-            </h2>
-            <p className="mb-4 text-muted-foreground">
-              Manage database schema and fix any issues with the database.
-            </p>
-            <Link
-              href="/admin/db-fix"
-              className="btn-destructive inline-block px-4 py-2 rounded hover:opacity-90 transition-all"
-            >
-              Database Admin
-            </Link>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 }

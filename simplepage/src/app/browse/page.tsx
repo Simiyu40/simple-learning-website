@@ -370,6 +370,21 @@ export default function BrowsePage() {
     }
   };
 
+  const handleViewStorageFile = async (file: StorageFile) => {
+    try {
+      const fileType = file.fileType || getFileTypeFromName(file.name);
+      const url = getFileUrl(file.name, file.bucket);
+      setViewingFile({
+        url,
+        title: file.name,
+        fileType
+      });
+    } catch (error) {
+      console.error('Error viewing file:', error);
+      setError('Failed to open file viewer. Please try again.');
+    }
+  };
+
   if (loading) return (
     <div className="flex flex-col items-center justify-center min-h-[50vh] p-4">
       <Loader className="h-8 w-8 animate-spin text-blue-500 mb-4" />
@@ -403,6 +418,23 @@ export default function BrowsePage() {
       case 'doc':
       case 'docx':
         return <FileText className="h-5 w-5 text-blue-500" />;
+      case 'xls':
+      case 'xlsx':
+        return <FileText className="h-5 w-5 text-green-500" />;
+      case 'ppt':
+      case 'pptx':
+        return <FileText className="h-5 w-5 text-orange-500" />;
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'gif':
+      case 'bmp':
+      case 'webp':
+        return <Image className="h-5 w-5 text-green-500" />;
+      case 'txt':
+      case 'md':
+      case 'csv':
+        return <FileText className="h-5 w-5 text-gray-500" />;
       default:
         return <File className="h-5 w-5 text-gray-400" />;
     }
@@ -422,7 +454,21 @@ export default function BrowsePage() {
   // Function to get the file type from filename
   const getFileTypeFromName = (fileName: string) => {
     const parts = fileName.split('.');
-    return parts.length > 1 ? parts[parts.length - 1] : 'unknown';
+    const extension = parts.length > 1 ? parts[parts.length - 1].toLowerCase() : 'unknown';
+
+    // Normalize common file type variations
+    switch (extension) {
+      case 'jpeg':
+        return 'jpg';
+      case 'docx':
+        return 'docx';
+      case 'xlsx':
+        return 'xlsx';
+      case 'pptx':
+        return 'pptx';
+      default:
+        return extension;
+    }
   };
 
   return (
@@ -532,15 +578,14 @@ export default function BrowsePage() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex justify-end space-x-2">
-                          <a
-                            href={getFileUrl(file.name, file.bucket)}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                          <button
+                            type="button"
+                            onClick={() => handleViewStorageFile(file)}
                             className="inline-flex items-center text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded-md transition-colors"
                           >
                             <Eye className="h-4 w-4 mr-1" />
                             View
-                          </a>
+                          </button>
                           <button
                             type="button"
                             onClick={() => downloadFile(file.name, file.bucket)}

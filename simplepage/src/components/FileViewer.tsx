@@ -9,9 +9,19 @@ interface FileViewerProps {
 }
 
 export function FileViewer({ url, fileType, title, onClose }: FileViewerProps) {
-  const isImage = ['jpg', 'jpeg', 'png'].includes(fileType.toLowerCase());
+  const isImage = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(fileType.toLowerCase());
   const isPDF = fileType.toLowerCase() === 'pdf';
-  const isText = ['txt', 'md'].includes(fileType.toLowerCase());
+  const isText = ['txt', 'md', 'csv'].includes(fileType.toLowerCase());
+  const isWord = ['doc', 'docx'].includes(fileType.toLowerCase());
+  const isOfficeDoc = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(fileType.toLowerCase());
+
+  // For Word documents and other Office files, we'll use Google Docs Viewer
+  const getViewerUrl = (originalUrl: string, fileType: string) => {
+    if (isOfficeDoc) {
+      return `https://docs.google.com/gview?url=${encodeURIComponent(originalUrl)}&embedded=true`;
+    }
+    return originalUrl;
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -47,11 +57,27 @@ export function FileViewer({ url, fileType, title, onClose }: FileViewerProps) {
               className="w-full h-full"
               title={title}
             />
+          ) : isOfficeDoc ? (
+            <iframe
+              src={getViewerUrl(url, fileType)}
+              className="w-full h-full"
+              title={title}
+            />
           ) : (
             <div className="flex items-center justify-center h-full">
-              <p className="text-gray-500">
-                Preview not available for this file type. Please download to view.
-              </p>
+              <div className="text-center">
+                <p className="text-gray-500 mb-4">
+                  Preview not available for this file type.
+                </p>
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                >
+                  Open in New Tab
+                </a>
+              </div>
             </div>
           )}
         </div>

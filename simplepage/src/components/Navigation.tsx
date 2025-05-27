@@ -47,28 +47,33 @@ export default function Navigation() {
             >
               Upload
             </Link>
-            <Link
-              href="/fix"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                pathname === '/fix'
-                  ? 'btn-warning'
-                  : 'btn-secondary hover:btn-warning'
-              }`}
-              suppressHydrationWarning
-            >
-              Fix
-            </Link>
-            <Link
-              href="/inspect"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                pathname === '/inspect'
-                  ? 'btn-info'
-                  : 'btn-secondary hover:btn-info'
-              }`}
-              suppressHydrationWarning
-            >
-              Inspect
-            </Link>
+            {/* Fix and Inspect tabs hidden as requested */}
+            {false && (
+              <>
+                <Link
+                  href="/fix"
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                    pathname === '/fix'
+                      ? 'btn-warning'
+                      : 'btn-secondary hover:btn-warning'
+                  }`}
+                  suppressHydrationWarning
+                >
+                  Fix
+                </Link>
+                <Link
+                  href="/inspect"
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                    pathname === '/inspect'
+                      ? 'btn-info'
+                      : 'btn-secondary hover:btn-info'
+                  }`}
+                  suppressHydrationWarning
+                >
+                  Inspect
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
